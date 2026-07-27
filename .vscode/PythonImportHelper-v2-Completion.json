@@ -1,0 +1,190 @@
+[
+    {
+        "label": "sqlite3",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "sqlite3",
+        "description": "sqlite3",
+        "detail": "sqlite3",
+        "documentation": {}
+    },
+    {
+        "label": "FastAPI",
+        "importPath": "fastapi",
+        "description": "fastapi",
+        "isExtraImport": true,
+        "detail": "fastapi",
+        "documentation": {}
+    },
+    {
+        "label": "HTTPException",
+        "importPath": "fastapi",
+        "description": "fastapi",
+        "isExtraImport": true,
+        "detail": "fastapi",
+        "documentation": {}
+    },
+    {
+        "label": "CORSMiddleware",
+        "importPath": "fastapi.middleware.cors",
+        "description": "fastapi.middleware.cors",
+        "isExtraImport": true,
+        "detail": "fastapi.middleware.cors",
+        "documentation": {}
+    },
+    {
+        "label": "StaticFiles",
+        "importPath": "fastapi.staticfiles",
+        "description": "fastapi.staticfiles",
+        "isExtraImport": true,
+        "detail": "fastapi.staticfiles",
+        "documentation": {}
+    },
+    {
+        "label": "FileResponse",
+        "importPath": "fastapi.responses",
+        "description": "fastapi.responses",
+        "isExtraImport": true,
+        "detail": "fastapi.responses",
+        "documentation": {}
+    },
+    {
+        "label": "BaseModel",
+        "importPath": "pydantic",
+        "description": "pydantic",
+        "isExtraImport": true,
+        "detail": "pydantic",
+        "documentation": {}
+    },
+    {
+        "label": "field_validator",
+        "importPath": "pydantic",
+        "description": "pydantic",
+        "isExtraImport": true,
+        "detail": "pydantic",
+        "documentation": {}
+    },
+    {
+        "label": "Optional",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "get_connection",
+        "importPath": "database",
+        "description": "database",
+        "isExtraImport": true,
+        "detail": "database",
+        "documentation": {}
+    },
+    {
+        "label": "init_db",
+        "importPath": "database",
+        "description": "database",
+        "isExtraImport": true,
+        "detail": "database",
+        "documentation": {}
+    },
+    {
+        "label": "get_connection",
+        "kind": 2,
+        "importPath": "database",
+        "description": "database",
+        "peekOfCode": "def get_connection():\n    conn = sqlite3.connect(DB_NAME)\n    conn.row_factory = sqlite3.Row\n    return conn\ndef init_db():\n    conn = get_connection()\n    cursor = conn.cursor()\n    cursor.execute(\"\"\"\n        CREATE TABLE IF NOT EXISTS tasks (\n            id INTEGER PRIMARY KEY AUTOINCREMENT,",
+        "detail": "database",
+        "documentation": {}
+    },
+    {
+        "label": "init_db",
+        "kind": 2,
+        "importPath": "database",
+        "description": "database",
+        "peekOfCode": "def init_db():\n    conn = get_connection()\n    cursor = conn.cursor()\n    cursor.execute(\"\"\"\n        CREATE TABLE IF NOT EXISTS tasks (\n            id INTEGER PRIMARY KEY AUTOINCREMENT,\n            title TEXT NOT NULL,\n            completed BOOLEAN NOT NULL DEFAULT 0\n        )\n    \"\"\")",
+        "detail": "database",
+        "documentation": {}
+    },
+    {
+        "label": "DB_NAME",
+        "kind": 5,
+        "importPath": "database",
+        "description": "database",
+        "peekOfCode": "DB_NAME = \"tasks.db\"\ndef get_connection():\n    conn = sqlite3.connect(DB_NAME)\n    conn.row_factory = sqlite3.Row\n    return conn\ndef init_db():\n    conn = get_connection()\n    cursor = conn.cursor()\n    cursor.execute(\"\"\"\n        CREATE TABLE IF NOT EXISTS tasks (",
+        "detail": "database",
+        "documentation": {}
+    },
+    {
+        "label": "TaskCreate",
+        "kind": 6,
+        "importPath": "main",
+        "description": "main",
+        "peekOfCode": "class TaskCreate(BaseModel):\n    title: str\n    @field_validator(\"title\")\n    @classmethod\n    def title_not_empty(cls, v):\n        if not v or not v.strip():\n            raise ValueError(\"Task title cannot be empty\")\n        return v.strip()\nclass TaskUpdate(BaseModel):\n    title: Optional[str] = None",
+        "detail": "main",
+        "documentation": {}
+    },
+    {
+        "label": "TaskUpdate",
+        "kind": 6,
+        "importPath": "main",
+        "description": "main",
+        "peekOfCode": "class TaskUpdate(BaseModel):\n    title: Optional[str] = None\n    completed: Optional[bool] = None\n    @field_validator(\"title\")\n    @classmethod\n    def title_not_empty(cls, v):\n        if v is not None and not v.strip():\n            raise ValueError(\"Task title cannot be empty\")\n        return v.strip() if v else v\n# ---------- Routes ----------",
+        "detail": "main",
+        "documentation": {}
+    },
+    {
+        "label": "get_tasks",
+        "kind": 2,
+        "importPath": "main",
+        "description": "main",
+        "peekOfCode": "def get_tasks():\n    conn = get_connection()\n    rows = conn.execute(\"SELECT * FROM tasks ORDER BY id DESC\").fetchall()\n    conn.close()\n    return [dict(row) for row in rows]\n@app.post(\"/tasks\", status_code=201)\ndef create_task(task: TaskCreate):\n    conn = get_connection()\n    cursor = conn.execute(\n        \"INSERT INTO tasks (title, completed) VALUES (?, 0)\", (task.title,)",
+        "detail": "main",
+        "documentation": {}
+    },
+    {
+        "label": "create_task",
+        "kind": 2,
+        "importPath": "main",
+        "description": "main",
+        "peekOfCode": "def create_task(task: TaskCreate):\n    conn = get_connection()\n    cursor = conn.execute(\n        \"INSERT INTO tasks (title, completed) VALUES (?, 0)\", (task.title,)\n    )\n    conn.commit()\n    new_id = cursor.lastrowid\n    row = conn.execute(\"SELECT * FROM tasks WHERE id = ?\", (new_id,)).fetchone()\n    conn.close()\n    return dict(row)",
+        "detail": "main",
+        "documentation": {}
+    },
+    {
+        "label": "update_task",
+        "kind": 2,
+        "importPath": "main",
+        "description": "main",
+        "peekOfCode": "def update_task(task_id: int, task: TaskUpdate):\n    conn = get_connection()\n    existing = conn.execute(\"SELECT * FROM tasks WHERE id = ?\", (task_id,)).fetchone()\n    if not existing:\n        conn.close()\n        raise HTTPException(status_code=404, detail=\"Task not found\")\n    new_title = task.title if task.title is not None else existing[\"title\"]\n    new_completed = (\n        task.completed if task.completed is not None else existing[\"completed\"]\n    )",
+        "detail": "main",
+        "documentation": {}
+    },
+    {
+        "label": "delete_task",
+        "kind": 2,
+        "importPath": "main",
+        "description": "main",
+        "peekOfCode": "def delete_task(task_id: int):\n    conn = get_connection()\n    existing = conn.execute(\"SELECT * FROM tasks WHERE id = ?\", (task_id,)).fetchone()\n    if not existing:\n        conn.close()\n        raise HTTPException(status_code=404, detail=\"Task not found\")\n    conn.execute(\"DELETE FROM tasks WHERE id = ?\", (task_id,))\n    conn.commit()\n    conn.close()\n    return None",
+        "detail": "main",
+        "documentation": {}
+    },
+    {
+        "label": "serve_frontend",
+        "kind": 2,
+        "importPath": "main",
+        "description": "main",
+        "peekOfCode": "def serve_frontend():\n    return FileResponse(\"static/index.html\")",
+        "detail": "main",
+        "documentation": {}
+    },
+    {
+        "label": "app",
+        "kind": 5,
+        "importPath": "main",
+        "description": "main",
+        "peekOfCode": "app = FastAPI(title=\"Task Manager API\")\n# Allow the front end to call this API (fine for a student project / same-origin deploy)\napp.add_middleware(\n    CORSMiddleware,\n    allow_origins=[\"*\"],\n    allow_methods=[\"*\"],\n    allow_headers=[\"*\"],\n)\ninit_db()\n# ---------- Data models ----------",
+        "detail": "main",
+        "documentation": {}
+    }
+]

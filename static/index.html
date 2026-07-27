@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Task Manager</title>
+
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+
+<body>
+
+  <header>
+    <h1>📋 Task Manager</h1>
+    <p>Organize your daily tasks easily.</p>
+  </header>
+
+  <main class="container">
+
+    <div class="task-card">
+
+      <div class="task-header">
+        <h2>My Tasks</h2>
+        <span id="taskCount">0 Tasks</span>
+      </div>
+
+      <div class="add-task">
+
+        <input type="text" id="taskInput" placeholder="Enter a new task...">
+
+        <button id="addBtn">
+          Add Task
+        </button>
+
+      </div>
+
+      <ul id="taskList"></ul>
+
+      <p id="emptyMessage">
+        No tasks available. Add your first task.
+      </p>
+
+    </div>
+
+  </main>
+
+  <script src="/static/script.js"></script>
+
+</body>
+
+</html>
