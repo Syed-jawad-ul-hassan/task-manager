@@ -25,6 +25,14 @@
         "documentation": {}
     },
     {
+        "label": "Request",
+        "importPath": "fastapi",
+        "description": "fastapi",
+        "isExtraImport": true,
+        "detail": "fastapi",
+        "documentation": {}
+    },
+    {
         "label": "CORSMiddleware",
         "importPath": "fastapi.middleware.cors",
         "description": "fastapi.middleware.cors",
@@ -41,11 +49,11 @@
         "documentation": {}
     },
     {
-        "label": "FileResponse",
-        "importPath": "fastapi.responses",
-        "description": "fastapi.responses",
+        "label": "Jinja2Templates",
+        "importPath": "fastapi.templating",
+        "description": "fastapi.templating",
         "isExtraImport": true,
-        "detail": "fastapi.responses",
+        "detail": "fastapi.templating",
         "documentation": {}
     },
     {
@@ -174,7 +182,7 @@
         "kind": 2,
         "importPath": "main",
         "description": "main",
-        "peekOfCode": "def serve_frontend():\n    return FileResponse(\"static/index.html\")",
+        "peekOfCode": "def serve_frontend(request: Request):\n    return templates.TemplateResponse(\n        \"index.html\",\n        {\"request\": request}\n    )",
         "detail": "main",
         "documentation": {}
     },
@@ -183,7 +191,16 @@
         "kind": 5,
         "importPath": "main",
         "description": "main",
-        "peekOfCode": "app = FastAPI(title=\"Task Manager API\")\n# Allow the front end to call this API (fine for a student project / same-origin deploy)\napp.add_middleware(\n    CORSMiddleware,\n    allow_origins=[\"*\"],\n    allow_methods=[\"*\"],\n    allow_headers=[\"*\"],\n)\ninit_db()\n# ---------- Data models ----------",
+        "peekOfCode": "app = FastAPI(title=\"Task Manager API\")\ntemplates = Jinja2Templates(directory=\"templates\")\n# Allow the front end to call this API (fine for a student project / same-origin deploy)\napp.add_middleware(\n    CORSMiddleware,\n    allow_origins=[\"*\"],\n    allow_methods=[\"*\"],\n    allow_headers=[\"*\"],\n)\ninit_db()",
+        "detail": "main",
+        "documentation": {}
+    },
+    {
+        "label": "templates",
+        "kind": 5,
+        "importPath": "main",
+        "description": "main",
+        "peekOfCode": "templates = Jinja2Templates(directory=\"templates\")\n# Allow the front end to call this API (fine for a student project / same-origin deploy)\napp.add_middleware(\n    CORSMiddleware,\n    allow_origins=[\"*\"],\n    allow_methods=[\"*\"],\n    allow_headers=[\"*\"],\n)\ninit_db()\n# ---------- Data models ----------",
         "detail": "main",
         "documentation": {}
     }

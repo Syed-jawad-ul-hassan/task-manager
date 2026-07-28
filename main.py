@@ -1,13 +1,15 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
-from fastapi.responses import FileResponse
+from fastapi import Request
+from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel, field_validator
 from typing import Optional
 
 from database import get_connection, init_db
 
 app = FastAPI(title="Task Manager API")
+templates = Jinja2Templates(directory="templates")
 
 # Allow the front end to call this API (fine for a student project / same-origin deploy)
 app.add_middleware(
@@ -21,6 +23,7 @@ init_db()
 
 
 # ---------- Data models ----------
+
 
 class TaskCreate(BaseModel):
     title: str
@@ -46,6 +49,7 @@ class TaskUpdate(BaseModel):
 
 
 # ---------- Routes ----------
+
 
 @app.get("/tasks")
 def get_tasks():
@@ -110,5 +114,8 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 
 
 @app.get("/")
-def serve_frontend():
-    return FileResponse("static/index.html")
+def serve_frontend(request: Request):
+    return templates.TemplateResponse(
+        "index.html",
+        {"request": request}
+    )
